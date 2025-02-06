@@ -1,0 +1,58 @@
+# Node.js dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Angular build artifacts
+dist/
+out-tsc/
+coverage/
+.angular/
+
+# Storybook build files
+.storybook-out/
+.storybook-cache/
+storybook-static/
+
+# Editor & OS-specific files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Environment variables (NEVER COMMIT SECRETS!)
+.env
+.env.local
+.env.*.local
+
+# Logs & debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+debug.log*
+.log
+
+# Angular service worker cache
+ngsw-config.json
+ngsw-worker.js
+
+# Jest & Cypress test artifacts
+jest.config.js
+jest.cache/
+cypress/screenshots/
+cypress/videos/
+
+# Compiled TypeScript files
+*.js
+*.d.ts
+*.js.map
+
+# IDE, tooling & misc
+/.cache/
+.eslintcache
+prettier.cache
+/.sass-cache/

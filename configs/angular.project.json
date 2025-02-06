@@ -1,0 +1,60 @@
+{
+  "type": "Angular",
+  "description": "An Angular project _PROJECT_NAME_PLACEHOLDER_ with Storybook, Tailwind, DaisyUI, and routing",
+  "initSteps": [
+    "git init",
+    "git checkout -b main",
+    "npx @angular/cli new _PROJECT_NAME_PLACEHOLDER_ --defaults --routing true --standalone",
+    "cd _PROJECT_NAME_PLACEHOLDER_",
+    "npm install",
+    "npx ng add @storybook/angular",
+    "npx ng add tailwindcss",
+    "npm install daisyui"
+  ],
+  "installSteps": {
+    "dependencies": ["@angular/router", "@angular/forms"],
+    "devDependencies": ["storybook", "@storybook/angular", "@storybook/addon-essentials", "tailwindcss", "daisyui", "eslint", "@typescript-eslint/eslint-plugin", "@typescript-eslint/parser"]
+  },
+  "folders": ["src/app/components", "src/app/services", "src/app/pages", "src/assets", "src/stories"],
+  "files": [
+    {
+      "nameAndPath": "src/app/app.routes.ts",
+      "content": "import { Routes } from '@angular/router';\n\nexport const routes: Routes = [];"
+    },
+    {
+      "nameAndPath": "src/app/components/_PROJECT_NAME_PLACEHOLDER_/_PROJECT_NAME_PLACEHOLDER_.component.ts",
+      "content": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-_PROJECT_NAME_PLACEHOLDER_',\n  standalone: true,\n  templateUrl: './_PROJECT_NAME_PLACEHOLDER_.component.html',\n  styleUrls: ['./_PROJECT_NAME_PLACEHOLDER_.component.css']\n})\nexport class _PROJECT_NAME_PLACEHOLDER_Component {}"
+    },
+    {
+      "nameAndPath": "src/app/components/_PROJECT_NAME_PLACEHOLDER_/_PROJECT_NAME_PLACEHOLDER_.component.html",
+      "content": "<div class='p-4 bg-base-100 shadow rounded-xl'>Welcome to _PROJECT_NAME_PLACEHOLDER_ Component</div>"
+    },
+    {
+      "nameAndPath": "src/app/components/_PROJECT_NAME_PLACEHOLDER_/_PROJECT_NAME_PLACEHOLDER_.component.stories.ts",
+      "content": "import { Meta } from '@storybook/angular';\nimport { _PROJECT_NAME_PLACEHOLDER_Component } from './_PROJECT_NAME_PLACEHOLDER_.component';\n\nexport default {\n  title: 'Components/_PROJECT_NAME_PLACEHOLDER_',\n  component: _PROJECT_NAME_PLACEHOLDER_Component,\n} as Meta;\n\nexport const Default = {};"
+    },
+    {
+      "nameAndPath": "tailwind.config.js",
+      "content": "module.exports = {\n  content: ['./src/**/*.{html,ts}'],\n  theme: {\n    extend: {},\n  },\n  plugins: [require('daisyui')],\n};"
+    },
+    {
+      "nameAndPath": "README.md",
+      "content": "# Angular Project _PROJECT_NAME_PLACEHOLDER_\n\nThis is an Angular project created with automated setup."
+    },
+    {
+      "nameAndPath": ".env.example",
+      "content": "# Example environment variables\nAPI_URL=http://localhost:3000\n"
+    }
+  ],
+  "scripts": {
+    "start": "ng serve",
+    "build": "ng build",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test": "ng test",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "clean": "rimraf dist && rimraf coverage"
+  },
+  "vscodeSettings": true
+}
