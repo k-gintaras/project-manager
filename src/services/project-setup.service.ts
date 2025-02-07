@@ -24,6 +24,7 @@ export class ProjectSetupService {
       dependencies: [],
       devDependencies: [],
       initSteps: [],
+      postInitSteps: [],
       installSteps: { dependencies: [], devDependencies: [] },
       folders: [],
       files: [],
@@ -69,12 +70,31 @@ export class ProjectSetupService {
 
     console.log(`Project configuration set: ${JSON.stringify(this.project, null, 2)}`);
   }
-
-  /** Execute initialization steps */
   private executeInitSteps(): void {
-    this.project.initSteps.forEach((step) => {
-      console.log(`Running: ${step}`);
-      execSync(step, { stdio: 'inherit', cwd: this.project.location });
+    let currentDir = this.project.location; // Start in the project root
+
+    this.project.initSteps.forEach((step, index) => {
+      try {
+        if (step.startsWith('cd ')) {
+          // Handle "cd" command
+          const targetDir = step.split(' ')[1].trim();
+          if (targetDir === '..') {
+            currentDir = path.dirname(currentDir); // Move up one directory
+          } else {
+            currentDir = path.resolve(currentDir, targetDir); // Resolve relative or absolute paths
+          }
+          console.log(`📂 Changing directory to: ${currentDir}`);
+        } else {
+          // Execute other commands in the current directory
+          console.log(`🔄 Running step ${index + 1}: ${step}`);
+          execSync(step, { stdio: 'inherit', cwd: currentDir });
+          console.log(`✅ Successfully executed: ${step}`);
+        }
+      } catch (error) {
+        // Log errors without breaking the loop
+        console.error(`❌ Error during step ${index + 1}: ${step}`);
+        console.error(error);
+      }
     });
   }
 
@@ -128,7 +148,34 @@ export class ProjectSetupService {
     console.log('Updated package.json scripts.');
   }
 
-  /** Run the full setup process */
+  private copyPremadeConfigFiles(type: ProjectType): void {
+    // Define possible premade files based on type
+    const possibleFiles = [`${type.toLowerCase()}.gitignore`, `${type.toLowerCase()}.tsconfig.json`, `${type.toLowerCase()}.env`];
+
+    const configDir = path.resolve(__dirname, `../../configs`);
+    const targetDir = this.project.location;
+
+    // Check if each file exists in the configs directory before attempting to copy
+    possibleFiles.forEach((fileName) => {
+      const sourcePath = path.join(configDir, fileName);
+      const targetPath = path.join(targetDir, `_todo-${fileName}`);
+
+      // Check if the file exists in the source directory
+      if (fs.existsSync(sourcePath)) {
+        // Only copy if the target file does not already exist
+        if (!fs.existsSync(targetPath)) {
+          fs.copyFileSync(sourcePath, targetPath);
+          console.log(`✅ Copied config file: ${fileName} -> ${targetPath}`);
+        } else {
+          console.log(`⚠️ Skipped copying: ${targetPath} already exists.`);
+        }
+      } else {
+        // Log a warning if the file is not found
+        console.warn(`⚠️ Config file not found in "configs": ${sourcePath}`);
+      }
+    });
+  }
+
   createProject(): void {
     const { location, vscodeSettings } = this.project;
 
@@ -139,6 +186,7 @@ export class ProjectSetupService {
     this.installDependencies();
     this.createFolders();
     this.createFiles();
+    this.copyPremadeConfigFiles(this.project.type);
     this.updatePackageJsonScripts();
 
     if (vscodeSettings) {

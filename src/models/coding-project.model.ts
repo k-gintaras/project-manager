@@ -7,6 +7,7 @@ export interface CodingProject {
   dependencies: string[]; // List of runtime dependencies
   devDependencies: string[]; // List of development dependencies
   initSteps: string[]; // Steps for initializing the project
+  postInitSteps: string[]; // Steps for initializing the project
   installSteps: {
     dependencies: string[]; // Dependencies to install
     devDependencies: string[]; // Dev dependencies to install
